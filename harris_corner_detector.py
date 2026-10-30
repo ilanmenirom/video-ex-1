@@ -149,8 +149,16 @@ def create_grad_x_and_grad_y(input_image):
         height, width, _ = input_image.shape
 
     """Exercise Solution Start"""
-    Ix = np.random.uniform(size=(height, width))
-    Iy = np.random.uniform(size=(height, width))
+    # converted to grayscale if needed:
+    img = cv2.cvtColor(input_image, cv2.COLOR_BGR2GRAY) if nof_color_channels == 3 else input_image
+    img = img.astype(np.float64)
+    img_shifted_right = np.pad(img[:, :-1], ((0, 0), (1, 0)))
+    img_shifted_down = np.pad(img[:-1, :], ((1, 0), (0, 0)))
+    Ix = img - img_shifted_right
+    Iy = img - img_shifted_down
+    # Ignore artificial gradients at the padded borders.
+    Ix[:, 0] = 0
+    Iy[0, :] = 0
     """Exercise Solution End"""
     return Ix, Iy
 

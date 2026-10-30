@@ -37,7 +37,9 @@ def bgr_image_to_rgb_image(bgr_image):
         image and in the third dimension, swap the first and last slices.
     """
     rgb_image = bgr_image.copy()
-    """INSERT YOUR CODE HERE."""
+    """Exercise Solution Start"""
+    rgb_image = rgb_image[:,:,::-1]  # flip the RGB axis
+    """Exercise Solution End"""
     return rgb_image
 
 
@@ -54,10 +56,11 @@ def black_and_white_image_to_tiles(arr, nrows, ncols):
     Take inspiration from: https://stackoverflow.com/questions/16873441/form-a-big-2d-array-from-multiple-smaller-2d-arrays
     """
     h, w = arr.shape
-    """INSERT YOUR CODE HERE.
-    REPLACE THE RETURNED VALUE WITH YOUR OWN IMPLEMENTATION.
-    """
-    return np.random.uniform(size=((h//nrows) * (w //ncols), nrows, ncols))
+    """Exercise Solution Start"""
+    grid = arr.reshape(h // nrows, nrows, w // ncols, ncols)  # in this order, tiles are split correctly
+    grid = grid.swapaxes(1, 2) # Group the two tile axes together.
+    return grid.reshape(h // nrows * w // ncols, nrows, ncols)  # rehape to required axis
+    """Exercise Solution End"""
 
 
 def image_tiles_to_black_and_white_image(arr, h, w):
@@ -73,10 +76,11 @@ def image_tiles_to_black_and_white_image(arr, h, w):
     Take inspiration from: https://stackoverflow.com/questions/16873441/form-a-big-2d-array-from-multiple-smaller-2d-arrays
     """
     n, nrows, ncols = arr.shape
-    """INSERT YOUR CODE HERE.
-    REPLACE THE RETURNED VALUE WITH YOUR OWN IMPLEMENTATION.
-    """
-    return np.random.uniform(size=(h, w))
+    """Exercise Solution Start"""
+    grid = arr.reshape(h // nrows, w // ncols, nrows, ncols)  # opposite reshape to get grid
+    grid = grid.swapaxes(1, 2) # opposite swap
+    return grid.reshape(h, w)  # reshape back to original image shape
+    """Exercise Solution End"""
 
 
 def test_tiles_functions(to_save=False):
@@ -144,11 +148,10 @@ def create_grad_x_and_grad_y(input_image):
         nof_color_channels = 3
         height, width, _ = input_image.shape
 
-    """INSERT YOUR CODE HERE.
-    REPLACE THE VALUES FOR Ix AND Iy WITH THE GRADIENTS YOU COMPUTED.
-    """
+    """Exercise Solution Start"""
     Ix = np.random.uniform(size=(height, width))
     Iy = np.random.uniform(size=(height, width))
+    """Exercise Solution End"""
     return Ix, Iy
 
 

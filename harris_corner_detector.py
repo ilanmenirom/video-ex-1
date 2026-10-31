@@ -190,10 +190,15 @@ def calculate_response_image(input_image, K):
     # compute Ix and Iy
     Ix, Iy = create_grad_x_and_grad_y(input_image)
 
-    """INSERT YOUR CODE HERE.
-    REPLACE THE resonse_image WITH THE RESPONSE IMAGE YOU CALCULATED."""
-
-    response_image = np.random.uniform(size=Ix.shape)
+    """Exercise Code Start"""
+    g = np.ones((5, 5))  # window kernel    
+    Sxx = signal.convolve2d(Ix**2, g, mode='same')
+    Syy = signal.convolve2d(Iy**2, g, mode='same')
+    Sxy = signal.convolve2d(Ix * Iy, g, mode='same')
+    det = Sxx * Syy - Sxy**2
+    trace = Sxx + Syy
+    response_image = det - K * (trace**2)
+    """Exercise Code End"""
     return response_image
 
 
@@ -223,9 +228,20 @@ def our_harris_corner_detector(input_image, K, threshold):
     ones where the image from (3) is larger than the threshold.
     """
     response_image = calculate_response_image(input_image, K)
-    """INSERT YOUR CODE HERE.
-    REPLACE THE output_image WITH THE BINARY MAP YOU COMPUTED."""
-    output_image = np.random.uniform(size=response_image.shape)
+    """Exercise Solution Start"""
+    # NMS per tile:
+    h, w = response_image.shape
+    tile_size = 25
+    response_tiles = black_and_white_image_to_tiles(response_image, tile_size, tile_size)
+    nms_tiles = np.zeros_like(response_tiles)
+    for i, tile in enumerate(response_tiles):
+        row, col = np.unravel_index(np.argmax(tile), tile.shape)
+        nms_tiles[i, row, col] = tile[row, col]
+
+    nms_image = image_tiles_to_black_and_white_image(nms_tiles, h, w)
+    output_image = (nms_image > threshold).astype(np.uint8)
+    
+    """Exercise Solution End"""
     return output_image
 
 

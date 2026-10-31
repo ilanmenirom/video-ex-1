@@ -46,10 +46,31 @@ def convert_video_to_grayscale(input_video_path, output_video_path):
     https://docs.microsoft.com/en-us/windows/win32/medfound/video-fourccs
 
     """
-    """INSERT YOUR CODE HERE.
-    REMOVE THE pass KEYWORD AND IMPLEMENT YOUR OWN CODE.
-    """
-    pass
+    """Exercise Solution Start"""
+    cap = cv2.VideoCapture(input_video_path)
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+    writer = cv2.VideoWriter(
+        output_video_path,
+        cv2.VideoWriter_fourcc(*"XVID"),
+        fps,
+        (width, height),
+        isColor=False,  # For grayscale/binary frames.
+    )
+
+    while True:
+        success, frame_in = cap.read()
+        if not success:
+            break  # last frame has been read, exit
+
+        frame_out = cv2.cvtColor(frame_in, cv2.COLOR_BGR2GRAY)
+        writer.write(frame_out)
+
+    cap.release()
+    writer.release()
+    """End"""
 
 
 def convert_video_to_black_and_white(input_video_path, output_video_path):
@@ -73,10 +94,33 @@ def convert_video_to_black_and_white(input_video_path, output_video_path):
     https://docs.microsoft.com/en-us/windows/win32/medfound/video-fourccs
 
     """
-    """INSERT YOUR CODE HERE.
-        REMOVE THE pass KEYWORD AND IMPLEMENT YOUR OWN CODE.
-        """
-    pass
+    """Exercise Solution Start"""
+    cap = cv2.VideoCapture(input_video_path)
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+    writer = cv2.VideoWriter(
+        output_video_path,
+        cv2.VideoWriter_fourcc(*"XVID"),
+        fps,
+        (width, height),
+        isColor=False,  # For grayscale/binary frames.
+    )
+
+    while True:
+        success, frame_in = cap.read()
+        if not success:
+            break  # last frame has been read, exit
+
+        frame_out = cv2.cvtColor(frame_in, cv2.COLOR_BGR2GRAY)  # color --> grayscale
+        _, frame_out = cv2.threshold(frame_out, 0, 255, cv2.THRESH_OTSU)  #  grayscale --> B&W
+        writer.write(frame_out)
+
+    cap.release()
+    writer.release()
+    """Exercise Solution End"""
+
 
 
 def convert_video_to_sobel(input_video_path, output_video_path):
@@ -100,10 +144,32 @@ def convert_video_to_sobel(input_video_path, output_video_path):
     https://docs.microsoft.com/en-us/windows/win32/medfound/video-fourccs
 
     """
-    """INSERT YOUR CODE HERE.
-        REMOVE THE pass KEYWORD AND IMPLEMENT YOUR OWN CODE.
-        """
-    pass
+    """Exercise Solution Start"""
+    cap = cv2.VideoCapture(input_video_path)
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+    writer = cv2.VideoWriter(
+        output_video_path,
+        cv2.VideoWriter_fourcc(*"XVID"),
+        fps,
+        (width, height),
+        isColor=False,  # For grayscale/binary frames.
+    )
+
+    while True:
+        success, frame_in = cap.read()
+        if not success:
+            break  # last frame has been read, exit
+
+        frame_out = cv2.cvtColor(frame_in, cv2.COLOR_BGR2GRAY)  # color --> grayscale
+        frame_out = cv2.Sobel(frame_out, ddepth=-1, dx=1, dy=1, ksize=5)  #  grayscale --> B&W
+        writer.write(frame_out)
+
+    cap.release()
+    writer.release()
+    """Exercise Solution End"""
 
 
 def main():

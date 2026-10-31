@@ -24,3 +24,6 @@ dist/
 # VS Code local settings
 .vscode/
 *.code-workspace
+
+# Output videos:
+*.avi
